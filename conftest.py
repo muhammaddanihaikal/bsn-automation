@@ -4,6 +4,7 @@ from playwright.sync_api import Playwright, Browser, Page
 
 from config import (
     BASE_URL_INTERNAL,
+    HEADLESS,
     INTERNAL_SUPERADMIN_EMAIL,
     INTERNAL_SUPERADMIN_PASSWORD,
 )
@@ -26,7 +27,7 @@ def guard_environment(base_url: str):
 def global_login_internal(playwright: Playwright):
     """Login UI 1x di awal dan simpan session cookies ke file json."""
     os.makedirs(".auth", exist_ok=True)
-    browser = playwright.chromium.launch(headless=True)
+    browser = playwright.chromium.launch(headless=HEADLESS)
     context = browser.new_context()
     page = context.new_page()
 

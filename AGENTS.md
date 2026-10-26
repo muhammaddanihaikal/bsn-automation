@@ -28,6 +28,11 @@ Automation test untuk dua portal BSN (Bank Syariah Nasional):
 
 ## 3. Cara Login & MFA — PENTING!
 
+> ⚠️ **PERINGATAN KERAS — JANGAN HAPUS EMAIL DI MAILPIT:**
+> Mailpit (`https://mailpit.zegen.app`) adalah inbox bersama yang dipakai oleh seluruh tim QA dan Developer.
+> **DILARANG KERAS** menghapus email di Mailpit (baik via UI tombol tong sampah, maupun via API `DELETE /api/v1/messages`).
+> Pengambilan OTP wajib menggunakan sistem polling/wait sampai email baru mendarat, bukan dengan membersihkan inbox!
+
 Kedua portal menggunakan MFA (OTP via email). Di environment development,
 semua email dicegat oleh **Mailpit** — bukan dikirim ke email asli.
 

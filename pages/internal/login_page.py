@@ -10,7 +10,7 @@ class LoginPage(BasePage):
 
     def __init__(self, page: Page):
         super().__init__(page)
-        self.PATH = "/auth/users/login"
+        self.PATH = "/internal"
 
         # locator login form
         self.email = self.page.get_by_role("textbox", name="Email")

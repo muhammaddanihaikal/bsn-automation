@@ -2,6 +2,12 @@
 
 > Diadaptasi dari standar tim (`tc_template_v3.md`).
 
+> [!CAUTION]
+> **PERINGATAN PENGGUNAAN MAILPIT (INBOX BERSAMA):**
+> Mailpit (`https://mailpit.zegen.app`) digunakan bersama oleh seluruh tim QA & Developer.
+> **DILARANG KERAS MENGHAPUS EMAIL DI MAILPIT** (baik melalui tombol delete di Web UI maupun endpoint API `DELETE`).
+> Pengambilan OTP wajib menggunakan sistem polling/wait sampai email baru mendarat, bukan dengan cara menghapus email lama!
+
 ---
 
 ## 1. Aturan Format Test Case (.md)

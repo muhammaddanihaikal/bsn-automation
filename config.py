@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 
 # Muat file .env sekali untuk seluruh project
