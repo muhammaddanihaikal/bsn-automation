@@ -7,38 +7,25 @@ class AddUserPage(BasePage):
 
     def __init__(self, page: Page):
         super().__init__(page)
-        # TODO: Dani tentukan PATH form tambah user setelah reconnaisance
-        self.PATH = "/internal/users/create"
+        self.PATH = "/internal/users/create"  # TODO: Dani sesuaikan rute URL jika berbeda
 
         # === 1. LOCATOR FIELD INPUT FORM ===
-        # TODO: Dani isi locator input form sesuai atribut di browser
-        self.full_name_input = page.get_by_label("Nama Lengkap")
-        self.email_input = page.get_by_label("Email")
-        self.role_select = page.get_by_role("combobox", name="Role")
-        self.password_input = page.get_by_label("Kata Sandi")
-        self.confirm_password_input = page.get_by_label("Konfirmasi Kata Sandi")
+        # TODO: Dani isi locator input form di sini
 
         # === 2. TOMBOL AKSI ===
-        self.save_btn = page.get_by_role("button", name="Simpan")
-        self.cancel_btn = page.get_by_role("button", name="Batal")
+        # TODO: Dani isi locator tombol Simpan / Batal di sini
 
         # === 3. LOCATOR VALIDASI / ERROR MESSAGE MANDATORY ===
-        # TODO: Dani tentukan locator error saat field wajib dikosongkan
-        self.error_name = page.get_by_text("Nama wajib diisi")
-        self.error_email = page.get_by_text("Email wajib diisi")
+        # TODO: Dani isi locator pesan error saat field mandatory dikosongkan
 
     def fill_form(self, data: dict):
         """Mengisi seluruh field form tambah pengguna."""
-        # TODO: Dani isi urutan pengetikan form
         pass
 
     def save(self):
         """Mengeklik tombol Simpan."""
-        # TODO: Dani aktifkan aksi klik simpan
-        # self.save_btn.click()
         pass
 
     def add_user(self, data: dict):
         """Alur lengkap: mengisi form dan submit simpan data."""
-        self.fill_form(data)
-        self.save()
+        pass

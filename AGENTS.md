@@ -267,3 +267,10 @@ AI yang bekerja di repo ini **WAJIB** mematuhi pagar pembatas berikut:
   1. Hentikan eksekusi dan catat error trace secara lengkap.
   2. Laporkan ke user: elemen apa yang hilang, dugaan penyebabnya (bug UI atau selector usang).
   3. **Tunggu persetujuan user** sebelum mengubah kode/selector apapun.
+
+### Aturan 5 — Pembuatan Modul Baru WAJIB Model Skeleton (Dikosongkan)
+- Ketika user meminta membuat Page Object atau Test baru, AI **DILARANG** langsung menebak-nebak locator atau mengisi alur implementasi secara penuh tanpa instruksi eksplisit.
+- AI **WAJIB** membuat format **Skeleton (Kerangka Siap Isi)**:
+  1. **Page Object**: Mewarisi `BasePage`, atribut locator diberi nilai placeholder atau komentar `# TODO: Dani isi locator`, dan body fungsi aksi diisi `pass` / `# TODO`.
+  2. **Test Function**: Menggunakan struktur **AAA (Arrange, Act, Assert)** dengan komentar nomor `1. Arrange`, `2. Act`, `3. Assert` di mana isinya dikosongkan dengan `pass` / `# TODO`.
+  3. **Tujuan**: Memberikan ruang belajar bagi user (Dani) untuk mengisi locator dan logika pengujian sendiri setelah melakukan inspeksi/reconnaisance UI langsung.
