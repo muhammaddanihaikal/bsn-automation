@@ -1,22 +1,19 @@
 import os
 import pytest
-from dotenv import load_dotenv
 from playwright.sync_api import Playwright, Browser, Page
 
-from config import BASE_URL_INTERNAL
+from config import (
+    BASE_URL_INTERNAL,
+    INTERNAL_SUPERADMIN_EMAIL,
+    INTERNAL_SUPERADMIN_PASSWORD,
+)
 from helpers.mailpit import get_otp
 from api.internal_user_api import InternalUserAPI
 from pages.internal.login_page import LoginPage
 
-load_dotenv()
-
-# Domain aman untuk pengujian (sandbox & local only)
+# Domain aman untuk pengujian
 SAFE_DOMAINS = ["sandbox.zegen.app", "localhost", "127.0.0.1"]
-
-LOGIN_URL = f"{BASE_URL_INTERNAL}/auth/users/login"
-INTERNAL_DASH_URL = f"{BASE_URL_INTERNAL}/internal"
-AUTO_EMAIL_INTERNAL = os.getenv("INTERNAL_SUPERADMIN_EMAIL") or os.getenv("AUTO_EMAIL_INTERNAL", "")
-AUTO_PASSWORD_INTERNAL = os.getenv("INTERNAL_SUPERADMIN_PASSWORD") or os.getenv("AUTO_PASSWORD_INTERNAL", "")
+INTERNAL_DASH_URL = f"{BASE_URL_INTERNAL}/internal/dashboard"
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -36,22 +33,16 @@ def global_login_internal(playwright: Playwright):
     # 1. Isi form login
     login_page = LoginPage(page)
     login_page.open()
-    login_page.login(AUTO_EMAIL_INTERNAL, AUTO_PASSWORD_INTERNAL)
+    login_page.login(INTERNAL_SUPERADMIN_EMAIL, INTERNAL_SUPERADMIN_PASSWORD)
 
-    # 2. Tunggu form OTP muncul
-    page.wait_for_selector("input[placeholder*='kode'], input[placeholder*='OTP']")
+    # 2. Ambil kode OTP dari Mailpit & isi via LoginPage
+    otp = get_otp(INTERNAL_SUPERADMIN_EMAIL)
+    login_page.fill_otp(otp)
 
-    # 3. Ambil kode OTP dari Mailpit
-    otp = get_otp(AUTO_EMAIL_INTERNAL)
-
-    # 4. Ketik OTP dan verifikasi
-    page.get_by_placeholder("kode").fill(otp)
-    page.get_by_role("button", name="Verifikasi").click()
-
-    # 5. Tunggu redirect ke dashboard
+    # 3. Tunggu redirect ke dashboard
     page.wait_for_url(f"{INTERNAL_DASH_URL}/**", timeout=15000)
 
-    # 6. Simpan cookies login
+    # 4. Simpan cookies login
     context.storage_state(path=".auth/internal_state.json")
     browser.close()
 
