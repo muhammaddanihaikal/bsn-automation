@@ -13,17 +13,17 @@
 ### Steps:
 1. Masuk ke halaman Login Internal BSN.
 2. Mengisi field Email dengan data valid.
-3. Mengisi field Kata Sandi dengan data valid.
-4. Klik button Masuk.
-5. Mengisi field Kode OTP dari Mailpit.
-6. Klik button Verifikasi.
+3. Mengisi field Password dengan data valid.
+4. Klik button Masuk ke Akun BSN.
+5. Mengisi 6 kotak kode OTP dari Mailpit.
+6. Klik button Lanjutkan.
 
 ### Expected Results:
 1. Berhasil membuka halaman Login Internal BSN.
 2. Berhasil mengisi field Email.
-3. Berhasil mengisi field Kata Sandi.
-4. Berhasil menampilkan form verifikasi OTP.
-5. Berhasil mengisi field Kode OTP.
+3. Berhasil mengisi field Password.
+4. Berhasil menampilkan form verifikasi OTP Konfirmasi Identitas.
+5. Berhasil mengisi 6 kotak kode OTP.
 6. Berhasil masuk ke halaman Dashboard Internal BSN.
 
 ---
