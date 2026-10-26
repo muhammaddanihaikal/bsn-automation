@@ -5,10 +5,12 @@ TC-INT-AUTH-01 s/d TC-INT-AUTH-04
 import pytest
 import allure
 from playwright.sync_api import Page, expect
+
+from config import BASE_URL_INTERNAL
 from pages.internal.login_page import LoginPage
 
-LOGIN_URL     = "https://terasrumah-sandbox.zegen.app/auth/users/login"
-DASHBOARD_URL = "https://terasrumah-sandbox.zegen.app/internal"
+LOGIN_URL     = f"{BASE_URL_INTERNAL}/auth/users/login"
+DASHBOARD_URL = f"{BASE_URL_INTERNAL}/internal"
 
 
 class TestAuthInternal:
@@ -17,21 +19,24 @@ class TestAuthInternal:
     @pytest.mark.smoke
     def test_login_valid(self, logged_in_internal: Page):
         """Verifikasi user berhasil login dan diarahkan ke dashboard internal."""
-        # ARRANGE + ACT: dihandle fixture logged_in_internal
+        # 1. Arrange & 2. Act: dihandle fixture logged_in_internal
         page = logged_in_internal
-        # ASSERT
+
+        # 3. Assert
         expect(page).to_have_url(f"{DASHBOARD_URL}/**")
 
     @allure.title("[TC-INT-AUTH-02] Logout redirect ke halaman Login")
     @pytest.mark.smoke
     def test_logout(self, logged_in_internal: Page):
         """[Bug Retest] Logout harus redirect ke Login, bukan halaman error."""
-        # ARRANGE
+        # 1. Arrange
         page = logged_in_internal
-        # ACT — ⚠️ Selector dropdown profil & tombol Keluar diisi setelah reconnaisance
+
+        # 2. Act — ⚠️ Selector dropdown profil & tombol Keluar diisi setelah reconnaisance
         # page.get_by_role("button", name="...nama admin...").click()
         # page.get_by_role("menuitem", name="Keluar").click()
-        # ASSERT
+
+        # 3. Assert
         # expect(page).to_have_url(LOGIN_URL)
         pytest.skip("⚠️ Selector belum dikonfirmasi — tunggu reconnaisance UI (Phase 0b)")
 

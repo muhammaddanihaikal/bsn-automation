@@ -1,0 +1,11 @@
+{
+  "add_user": {
+    "name_prefix": "Pengguna",
+    "username_prefix": "autoqa_user",
+    "role": "TODO: isi role setelah reconnaisance",
+    "password": "TODO: isi password setelah reconnaisance"
+  },
+  "edit_user": {
+    "TODO": "isi setelah reconnaisance"
+  }
+}

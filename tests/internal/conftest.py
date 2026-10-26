@@ -3,12 +3,16 @@ import os
 import pytest
 from dotenv import load_dotenv
 from playwright.sync_api import Playwright, Browser, Page
+
+from config import BASE_URL_INTERNAL
 from helpers.mailpit import get_otp
+from api.internal_user_api import InternalUserAPI
+from utils.data_factory import generate_full_name, generate_username
 
 load_dotenv()
 
-LOGIN_URL           = "https://terasrumah-sandbox.zegen.app/auth/users/login"
-INTERNAL_DASH_URL   = "https://terasrumah-sandbox.zegen.app/internal"
+LOGIN_URL           = f"{BASE_URL_INTERNAL}/auth/users/login"
+INTERNAL_DASH_URL   = f"{BASE_URL_INTERNAL}/internal"
 AUTO_EMAIL_INTERNAL = os.getenv("AUTO_EMAIL_INTERNAL", "")
 
 
@@ -58,3 +62,33 @@ def logged_in_internal(browser: Browser, global_login_internal) -> Page:
     page.goto(INTERNAL_DASH_URL)
     yield page
     context.close()
+
+
+@pytest.fixture
+def api_create_user(logged_in_internal: Page) -> dict:
+    """
+    Fixture Seeding Data Tumbal:
+    1. Setup: Membuat data user tumbal via REST API sebelum test dimulai.
+    2. Yield: Meminjamkan payload data ke fungsi test.
+    3. Teardown: Menghapus data user tumbal via REST API setelah test selesai.
+    """
+    user_api = InternalUserAPI(logged_in_internal, BASE_URL_INTERNAL)
+    tumbal_name = generate_full_name("Pengguna")
+    tumbal_username = generate_username("tumbal")
+
+    # TODO: Dani lengkapi payload dan aktifkan saat API BSN sudah diketahui
+    # created_user = user_api.create_tumbal_user({
+    #     "name": tumbal_name,
+    #     "username": tumbal_username,
+    # })
+
+    mock_user_data = {
+        "id": "mock_tumbal_id_123",
+        "name": tumbal_name,
+        "username": tumbal_username,
+    }
+
+    yield mock_user_data
+
+    # Teardown: pembersihan data uji
+    # user_api.delete_tumbal_user(mock_user_data["id"])
