@@ -91,3 +91,19 @@ def test_nama_skenario(logged_in_internal: Page):
     # 3. Assert (validasi)
     pass
 ```
+
+---
+
+## 5. Aturan Penulisan Komentar Kode
+- **DILARANG membuat komentar panjang/bertele-tele.**
+- Komentar kode **cukup 1 baris saja**, simpel, ringkas, dan *to the point*.
+- Contoh yang dianjurkan:
+  ```python
+  # 1. Arrange
+  # Buka halaman tambah user
+  # 2. Act
+  # Simpan form
+  # 3. Assert
+  # Pastikan alert sukses muncul
+  ```
+

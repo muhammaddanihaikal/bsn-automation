@@ -115,6 +115,10 @@ Mengikuti **Pedoman Standar Koding Dani** (lihat Obsidian: `Automation/09 - Pedo
 - WAJIB ada di setiap fungsi Page dan fungsi Test (1 baris ringkas)
 - Di file test yang pakai `@allure.title`, docstring BOLEH dihapus agar tidak redundan
 
+### Komentar Kode
+- DILARANG membuat komentar panjang atau bertele-tele.
+- Komentar kode WAJIB **1 baris saja**, simpel, ringkas, dan to the point.
+
 ---
 
 ## 6. TC ID Convention
