@@ -1,0 +1,18 @@
+# Auth state (berisi token/cookies — jangan masuk git!)
+.auth/
+
+# Environment variables (berisi password — jangan masuk git!)
+.env
+
+# Allure output
+allure-results/
+allure-report/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# uv
+.venv/
