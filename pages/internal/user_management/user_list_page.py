@@ -7,18 +7,15 @@ class UserListPage(BasePage):
 
     def __init__(self, page: Page):
         super().__init__(page)
-        self.PATH = "/internal/users"  # TODO: Dani sesuaikan rute URL jika berbeda
+        self.PATH = "/internal/users"
 
-        # === 1. FILTER SECTION ===
-        # TODO: Dani isi locator field filter & tombol cari / reset di sini
+        # 1. Filter section
+        # TODO: Dani isi locator filter di sini
 
-        # === 2. TABEL SECTION ===
-        # TODO: Dani isi locator tabel, baris data, tombol tambah, dan tombol konfirmasi di sini
+        # 2. Tabel section
+        # TODO: Dani isi locator tabel di sini
 
-    # =========================================================================
-    # ACTION METHODS: FILTER & SEARCH
-    # =========================================================================
-
+    # Filter methods
     def filter_by_name(self, name: str):
         """Mengisi input pencarian/filter berdasarkan nama pengguna."""
         pass
@@ -39,10 +36,7 @@ class UserListPage(BasePage):
         """Menekan tombol Reset filter."""
         pass
 
-    # =========================================================================
-    # ACTION METHODS: TABEL & MANAJEMEN USER
-    # =========================================================================
-
+    # Tabel methods
     def get_user_row(self, identifier: str) -> Locator:
         """Mencari baris pengguna spesifik di tabel berdasarkan nama/email."""
         pass

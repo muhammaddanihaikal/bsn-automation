@@ -7,11 +7,11 @@ class Navbar:
     def __init__(self, page: Page):
         self.page = page
 
-        # === 1. MENU NAVIGASI UTAMA ===
+        # 1. Menu navigasi
         # TODO: Dani isi locator menu navigasi di sini
 
-        # === 2. USER PROFIL & LOGOUT ===
-        # TODO: Dani isi locator profile dropdown & tombol keluar di sini
+        # 2. Profil & logout
+        # TODO: Dani isi locator dropdown & tombol keluar di sini
 
     def go_to_user_management(self):
         """Klik menu navigasi ke Manajemen Pengguna."""

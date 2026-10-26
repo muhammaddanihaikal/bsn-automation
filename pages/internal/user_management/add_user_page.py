@@ -7,16 +7,16 @@ class AddUserPage(BasePage):
 
     def __init__(self, page: Page):
         super().__init__(page)
-        self.PATH = "/internal/users/create"  # TODO: Dani sesuaikan rute URL jika berbeda
+        self.PATH = "/internal/users/create"
 
-        # === 1. LOCATOR FIELD INPUT FORM ===
+        # 1. Locator input form
         # TODO: Dani isi locator input form di sini
 
-        # === 2. TOMBOL AKSI ===
+        # 2. Tombol aksi
         # TODO: Dani isi locator tombol Simpan / Batal di sini
 
-        # === 3. LOCATOR VALIDASI / ERROR MESSAGE MANDATORY ===
-        # TODO: Dani isi locator pesan error saat field mandatory dikosongkan
+        # 3. Pesan validasi error
+        # TODO: Dani isi locator pesan error saat mandatory kosong
 
     def fill_form(self, data: dict):
         """Mengisi seluruh field form tambah pengguna."""

@@ -51,25 +51,25 @@ semua test pakai session yang sama via `storage_state`.
 ```
 Automation Test/
 ├── .auth/                  ← Session files (gitignored, dibuat otomatis saat runtime)
+├── conftest.py             ← PUSAT SEMUA FIXTURE (gaya OrangeHRM — single conftest)
+├── config.py               ← Konfigurasi BASE_URL_INTERNAL & HEADLESS
 ├── helpers/
-│   └── mailpit.py          ← Mailpit helper — shared untuk internal & external
+│   └── mailpit.py          ← Mailpit helper — ambil OTP email
+├── api/
+│   └── internal_user_api.py← API helper data tumbal
 ├── pages/
-│   ├── internal/           ← Page Objects portal internal (employee)
-│   └── external/           ← Page Objects portal external (nasabah)
+│   ├── base_page.py        ← Induk Page Object
+│   ├── internal/           ← Page Objects portal internal
+│   └── external/           ← Page Objects portal external
 ├── tests/
-│   ├── internal/
-│   │   ├── conftest.py     ← Login fixture KHUSUS internal (logged_in_internal)
-│   │   └── test_*.py
-│   └── external/
-│       ├── conftest.py     ← Login fixture KHUSUS external (logged_in_external)
-│       └── test_*.py
-├── conftest.py             ← Root: environment safety guardrail
+│   ├── internal/           ← Test files portal internal
+│   └── external/           ← Test files portal external
 ├── pytest.ini              ← Konfigurasi pytest + markers
 ├── AGENTS.md               ← File ini
 └── .env                    ← Credentials (gitignored — copy dari .env.example)
 ```
 
-**Filosofi:** `conftest.py` di pytest bersifat hierarkis — fixture internal tidak bocor ke test external dan sebaliknya.
+**Filosofi:** Semua fixture dikumpulkan di 1 file tunggal `conftest.py` di root (gaya OrangeHRM) agar mudah dikelola dan ramah pemula.
 
 ---
 

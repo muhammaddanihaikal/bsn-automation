@@ -1,5 +1,7 @@
 """Page Object untuk halaman Login Portal Internal BSN (employee/staff)."""
+
 from playwright.sync_api import Page
+
 from pages.base_page import BasePage
 
 
@@ -10,19 +12,15 @@ class LoginPage(BasePage):
         super().__init__(page)
         self.PATH = "/auth/users/login"
 
-        # === 1. LOCATOR FORM LOGIN ===
-        # TODO: Dani isi locator email, kata sandi, dan tombol masuk di sini
-
-        # === 2. LOCATOR KONFIRMASI IDENTITAS & SESI BERAKHIR ===
-        # TODO: Dani isi locator tombol akun lain & halaman utama di sini
-
-    # =========================================================================
-    # ACTION METHODS
-    # =========================================================================
+        self.email = self.page.get_by_role("textbox", name="Email")
+        self.password = self.page.get_by_role("textbox", name="Password")
+        self.login_button = self.page.get_by_role("button", name="Masuk ke Akun BSN")
 
     def login(self, email: str, password: str):
         """Isi form login dan submit."""
-        pass
+        self.email.fill(email)
+        self.password.fill(password)
+        self.login_button.click()
 
     def click_other_account(self):
         """Klik button Masuk dengan akun lain."""

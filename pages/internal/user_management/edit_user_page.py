@@ -7,13 +7,13 @@ class EditUserPage(BasePage):
 
     def __init__(self, page: Page):
         super().__init__(page)
-        self.PATH = "/internal/users/edit"  # TODO: Dani sesuaikan rute URL jika berbeda
+        self.PATH = "/internal/users/edit"
 
-        # === 1. LOCATOR FIELD INPUT FORM EDIT ===
+        # 1. Locator input edit form
         # TODO: Dani isi locator input form edit di sini
 
-        # === 2. TOMBOL AKSI ===
-        # TODO: Dani isi locator tombol Simpan / Perbarui / Batal di sini
+        # 2. Tombol aksi
+        # TODO: Dani isi locator tombol Simpan / Perbarui di sini
 
     def update_form(self, data: dict):
         """Mengubah data form pengguna yang sedang diedit."""
