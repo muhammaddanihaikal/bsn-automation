@@ -10,27 +10,24 @@ class LoginPage(BasePage):
         super().__init__(page)
         self.PATH = "/auth/users/login"
 
-        # ⚠️ Semua selector dikonfirmasi setelah reconnaisance UI (Phase 0b)
-        self.email_input       = page.get_by_placeholder("Email")
-        self.password_input    = page.get_by_placeholder("Kata Sandi")
-        self.login_btn         = page.get_by_role("button", name="Masuk")
+        # === 1. LOCATOR FORM LOGIN ===
+        # TODO: Dani isi locator email, kata sandi, dan tombol masuk di sini
 
-        # Halaman Konfirmasi Identitas (setelah submit email+password)
-        self.other_account_btn = page.get_by_role("button", name="Masuk dengan akun lain")
+        # === 2. LOCATOR KONFIRMASI IDENTITAS & SESI BERAKHIR ===
+        # TODO: Dani isi locator tombol akun lain & halaman utama di sini
 
-        # Halaman auto-logout / session expired
-        self.home_btn          = page.get_by_role("button", name="Halaman Utama")
+    # =========================================================================
+    # ACTION METHODS
+    # =========================================================================
 
     def login(self, email: str, password: str):
         """Isi form login dan submit."""
-        self.email_input.fill(email)
-        self.password_input.fill(password)
-        self.login_btn.click()
+        pass
 
     def click_other_account(self):
-        """Klik button 'Masuk dengan akun lain' di halaman Konfirmasi Identitas."""
-        self.other_account_btn.click()
+        """Klik button Masuk dengan akun lain."""
+        pass
 
     def click_home_button(self):
-        """Klik button 'Halaman Utama' di halaman session expired / auto-logout."""
-        self.home_btn.click()
+        """Klik button Halaman Utama."""
+        pass

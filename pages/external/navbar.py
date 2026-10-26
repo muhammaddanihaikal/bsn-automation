@@ -7,6 +7,5 @@ class NavbarExternal:
     def __init__(self, page: Page):
         self.page = page
 
-        # TODO: Dani isi selector navigasi portal external setelah portal internal stabil
-        self.menu_beranda = page.get_by_role("link", name="Beranda")
-        self.menu_login = page.get_by_role("link", name="Masuk")
+        # === 1. MENU NAVIGASI ===
+        # TODO: Dani isi locator navigasi portal external di sini
