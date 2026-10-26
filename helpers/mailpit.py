@@ -1,4 +1,3 @@
-"""Helper untuk mengambil OTP dari Mailpit (shared antara internal & external)."""
 import os
 import re
 import requests
@@ -6,51 +5,26 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-MAILPIT_URL  = os.getenv("MAILPIT_URL", "https://mailpit.zegen.app")
-MAILPIT_AUTH = (
-    os.getenv("MAILPIT_USER", "admin"),
-    os.getenv("MAILPIT_PASS", "")
-)
+BASE_URL = os.getenv("MAILPIT_URL", "https://mailpit.zegen.app")
+AUTH = (os.getenv("MAILPIT_USER", "admin"), os.getenv("MAILPIT_PASS", "P@ssw0rd"))
 
 
-def get_otp(recipient_email: str, subject: str = "Kode Masuk") -> str:
-    """
-    Ambil kode OTP 6 digit terbaru dari Mailpit untuk email dan subject tertentu.
-    Dipanggil SETELAH form OTP muncul di browser (memastikan email sudah ada di Mailpit).
+def get_otp(email: str, subject: str = "Kode Masuk") -> str:
+    """Mengambil 6 digit kode OTP terbaru dari Mailpit."""
+    # 1. Cari pesan email terbaru
+    params = {"query": f"to:{email} subject:{subject}", "limit": 1}
+    response = requests.get(f"{BASE_URL}/api/v1/search", params=params, auth=AUTH).json()
+    messages = response.get("messages", [])
+    if not messages:
+        raise ValueError(f"Email OTP tidak ditemukan untuk {email}")
 
-    Args:
-        recipient_email: Email penerima OTP (akun automation).
-        subject: Subject email OTP (default: 'Kode Masuk').
+    # 2. Ambil isi HTML email
+    message_id = messages[0]["ID"]
+    detail = requests.get(f"{BASE_URL}/api/v1/message/{message_id}", auth=AUTH).json()
 
-    Returns:
-        String 6 digit OTP (contoh: '680169').
-    """
-    resp = requests.get(
-        f"{MAILPIT_URL}/api/v1/search",
-        params={
-            "query": f"to:{recipient_email} subject:{subject}",
-            "limit": 1
-        },
-        auth=MAILPIT_AUTH
-    )
-    resp.raise_for_status()
-    messages = resp.json().get("messages", [])
-    assert messages, (
-        f"❌ Email OTP tidak ditemukan di Mailpit untuk: {recipient_email}\n"
-        f"Pastikan form OTP sudah muncul di browser sebelum memanggil fungsi ini."
-    )
+    # 3. Ekstrak 6 angka OTP
+    match = re.search(r"\b(\d{6})\b", detail.get("HTML", ""))
+    if not match:
+        raise ValueError("Kode OTP 6 digit tidak ditemukan di email")
 
-    # Ambil detail email
-    detail = requests.get(
-        f"{MAILPIT_URL}/api/v1/message/{messages[0]['ID']}",
-        auth=MAILPIT_AUTH
-    ).json()
-
-    # Extract OTP dari HTML body (6 digit angka)
-    html_body = detail.get("HTML", "")
-    match = re.search(r'\b(\d{6})\b', html_body)
-    assert match, (
-        f"❌ OTP 6 digit tidak ditemukan di body email!\n"
-        f"Body: {html_body[:200]}..."
-    )
     return match.group(1)
