@@ -11,6 +11,8 @@ from pages.internal.stock_management.aset_baru.create_asset_baru_page import (
 )
 from utils.read_data import read_data
 
+asset_data = read_data("internal/asset_baru_data.json")
+
 
 class TestAssetBaru:
     @allure.title("[TC-INT-STOCK-01] Berhasil membuat dan mengajukan aset baru")
@@ -26,10 +28,8 @@ class TestAssetBaru:
         aset_baru_list_page.click_input_aset_baru()
 
         # 2. Act (Eksekusi Langkah 1 menggunakan data JSON)
-        asset_data = read_data("internal/asset_baru_data.json")
-        create_asset_baru_page.fill_step_1_informasi(
-            asset_data["step_1_informasi"]
-        )
+        create_asset_baru_page.fill_step_1_informasi(asset_data["step_1_informasi"])
+        create_asset_baru_page.fill_step_2_harga(asset_data["step_2_harga"])
 
-        # 3. Assert (Berhasil berpindah ke Langkah 2 Harga)
-        expect(create_asset_baru_page.harga_button).to_be_visible()
+        # 3. Assert (Berhasil berpindah ke Langkah 3 Galeri Foto)
+        expect(create_asset_baru_page.galeri_button).to_be_visible()

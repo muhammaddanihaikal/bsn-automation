@@ -32,9 +32,10 @@ class CreateAssetBaruPage(BasePage):
 
         # === 2. LOCATOR LANGKAH 2 (HARGA) ===
         self.harga_button = self.page.get_by_role("button", name="2 Harga")
-
-        # TODO: Dani isi locator textbox Harga Aset (Netto)
-        # TODO: Dani isi locator textbox Persentase DP (%)
+        self.price = self.page.locator("#price")
+        self.promo_switch = self.page.locator("#promo_enabled")
+        self.normal_price = self.page.locator("#normal_price")
+        self.dp_percentage = self.page.locator("#dp_percent")
 
         # === 3. LOCATOR LANGKAH 3 (GALERI FOTO & DENAH) ===
         self.galeri_button = self.page.get_by_role("button", name="3 Galeri")
@@ -104,10 +105,23 @@ class CreateAssetBaruPage(BasePage):
         # 7. Klik Selanjutnya
         self.selanjutnya_btn.click()
 
-    def fill_step_2_harga(self, harga: str, persen_dp: str = "5.0"):
+    def fill_step_2_harga(self, data: dict):
         """Mengisi data harga transaksi dan simulasi DP pada Langkah 2."""
-        # TODO: Dani ketik langkah pengisian Langkah 2 lalu klik Selanjutnya
-        pass
+        # 1. Isi harga aset (netto)
+        self.price.fill(data["price"])
+
+        # 2. Atur switch promo coret & isi harga normal jika aktif
+        if data.get("promo_coret", False):
+            self.promo_switch.check()
+            self.normal_price.fill(data["normal_price"])
+        else:
+            self.promo_switch.uncheck()
+
+        # 3. Isi persentase DP
+        self.dp_percentage.fill(data["persen_dp"])
+
+        # 4. Klik Selanjutnya
+        self.selanjutnya_btn.click()
 
     def upload_step_3_galeri(self, foto_paths: list[str], denah_path: str):
         """Mengunggah 4 foto aset dan 1 denah pada Langkah 3."""
