@@ -33,18 +33,28 @@ def _extract_otp_from_html(message_id: str) -> str | None:
     return match.group(1) if match else None
 
 
-def get_otp(email: str, subject: str = "Kode Masuk", timeout: int = 30) -> str:
+def get_otp(
+    email: str,
+    subject: str = "Kode Masuk",
+    timeout: int = 30,
+    before_id: str | None = None,
+) -> str:
     """Tunggu email baru mendarat di Mailpit lalu ambil 6 digit OTP."""
+    # 1. Catat ID email paling atas saat ini sebagai pembanding (email lama)
+    initial_id = before_id
+    if initial_id is None:
+        initial_message = _search_latest_email(email, subject)
+        initial_id = initial_message["ID"] if initial_message else None
+
     start_time = time.time()
 
-    # Looping tunggu email baru (maksimal 30 detik)
+    # 2. Looping tunggu sampai email dengan ID baru mendarat (maksimal 30 detik)
     while time.time() - start_time < timeout:
-        # 1. Cari email terbaru
+        # Cari 1 email teratas
         message = _search_latest_email(email, subject)
 
-        # 2. Cek apakah email baru mendarat (< 60 detik)
-        if message and _is_fresh_email(message):
-            # 3. Ambil 6 digit OTP
+        # 3. Hanya ambil jika ada email baru (ID berbeda dari email lama)
+        if message and message["ID"] != initial_id:
             otp = _extract_otp_from_html(message["ID"])
             if otp:
                 return otp

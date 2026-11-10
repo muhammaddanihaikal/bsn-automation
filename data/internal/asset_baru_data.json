@@ -1,0 +1,16 @@
+{
+  "step_1_informasi": {
+    "developer": "PT Harmoni Properti Nusantara",
+    "asset_type": "Rumah",
+    "project": "Harmoni Garden Residence",
+    "cluster": "Maple Garden",
+    "unit_type": "Tipe 36/",
+    "stock_unit": "50",
+    "subsidi": false,
+    "land_area": "90",
+    "floors": "2",
+    "bedrooms": "2",
+    "bathrooms": "2",
+    "description": "Rumah modern minimalis siap huni lokasi strategis"
+  }
+}

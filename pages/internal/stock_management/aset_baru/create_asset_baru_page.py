@@ -17,7 +17,7 @@ class CreateAssetBaruPage(BasePage):
         self.project_select = self.page.locator("#project_id")
         self.cluster_select = self.page.locator("#cluster_id")
         self.unit_type_select = self.page.locator("#unit_type")
-        self.stok_input = self.page.locator("#stok_unit")
+        self.stock_unit_input = self.page.locator("#stock_unit")
         self.subsidi_btn = self.page.get_by_role("button", name="Subsidi", exact=True)
         self.non_subsidi_btn = self.page.get_by_role("button", name="Non Subsidi")
 
@@ -59,9 +59,7 @@ class CreateAssetBaruPage(BasePage):
         # TODO: Dani isi locator toggle switch fasilitas unit & kawasan
 
         # === 7. TOMBOL NAVIGASI WIZARD ===
-        # TODO: Dani isi locator tombol 'Selanjutnya'
-        # TODO: Dani isi locator tombol 'Sebelumnya'
-        # TODO: Dani isi locator tombol 'Simpan dan Ajukan Perubahan'
+        self.selanjutnya_btn = self.page.get_by_test_id("aset-baru-form-next-button")
 
     # =========================================================================
     # ACTION METHODS
@@ -69,8 +67,42 @@ class CreateAssetBaruPage(BasePage):
 
     def fill_step_1_informasi(self, data: dict):
         """Mengisi data informasi dasar aset pada Langkah 1."""
-        # TODO: Dani ketik langkah pengisian Langkah 1 lalu klik Selanjutnya
-        pass
+        # 1. Pilih Developer
+        self.developer_select.click()
+        self.page.get_by_text(data["developer"]).click()
+
+        # 2. Pilih Tipe Aset
+        self.asset_type_select.click()
+        # Scroll dropdown ke bawah biar opsi 'Rumah' muncul di HTML
+        dropdown = self.page.locator(".ant-select-dropdown").filter(
+            has_text="Apartemen"
+        )
+        dropdown.locator(".rc-virtual-list-holder").evaluate("el => el.scrollTop = 500")
+        dropdown.get_by_text(data["asset_type"], exact=True).click()
+
+        # 3. Pilih Proyek & Klaster
+        self.project_select.click()
+        self.page.get_by_text(data["project"]).click()
+        self.cluster_select.click()
+        self.page.get_by_text(data["cluster"]).click()
+
+        # 4. Pilih Tipe Unit
+        self.unit_type_select.click()
+        self.page.get_by_text(data["unit_type"]).nth(1).click()
+
+        # 5. Isi Stok Unit & Subsidi
+        self.stock_unit_input.fill(data["stock_unit"])
+        self.subsidi_btn.click() if data["subsidi"] else self.non_subsidi_btn.click()
+
+        # 6. Isi Dimensi & Spesifikasi
+        self.land_area_input.fill(data["land_area"])
+        self.floors_input.fill(data["floors"])
+        self.bedrooms_input.fill(data["bedrooms"])
+        self.bathrooms_input.fill(data["bathrooms"])
+        self.description_input.fill(data["description"])
+
+        # 7. Klik Selanjutnya
+        self.selanjutnya_btn.click()
 
     def fill_step_2_harga(self, harga: str, persen_dp: str = "5.0"):
         """Mengisi data harga transaksi dan simulasi DP pada Langkah 2."""
