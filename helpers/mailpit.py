@@ -53,6 +53,4 @@ def get_otp(email: str, subject: str = "Kode Masuk", timeout: int = 30) -> str:
         time.sleep(1)
 
     # 5. Lempar error jika waktu habis
-    raise TimeoutError(
-        f"Email OTP baru belum masuk ke Mailpit setelah {timeout} detik"
-    )
+    raise TimeoutError(f"Email OTP baru belum masuk ke Mailpit setelah {timeout} detik")
