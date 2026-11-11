@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from playwright.sync_api import Page
 
 from pages.base_page import BasePage
@@ -39,8 +41,7 @@ class CreateAssetBaruPage(BasePage):
 
         # === 3. LOCATOR LANGKAH 3 (GALERI FOTO & DENAH) ===
         self.galeri_button = self.page.get_by_role("button", name="3 Galeri")
-        # TODO: Dani isi locator input upload foto & denah (set_input_files)
-        # TODO: Dani isi locator dropdown kategori foto (Wajib: Fasad Depan)
+        self.file_input = self.page.locator("input[type='file']")
 
         # === 4. LOCATOR LANGKAH 4 (LEGALITAS) ===
         self.legalitas_button = self.page.get_by_role("button", name="4 Legalitas")
@@ -124,9 +125,30 @@ class CreateAssetBaruPage(BasePage):
         self.selanjutnya_btn.click()
 
     def upload_step_3_galeri(self, data: dict):
-        """Mengunggah 4 foto aset dan 1 denah pada Langkah 3."""
-        # TODO: Dani ketik langkah upload 5 file gambar dan klik Selanjutnya
-        pass
+        """Mengunggah 4 foto aset dan 1 denah pada Langkah 3 serta mengatur kategori masing-masing."""
+        # 1. Konversi path gambar relatif ke absolute path lokal
+        file_paths = [str(Path(p).resolve()) for p in data["images"]]
+
+        # 2. Upload sekaligus seluruh file via set_input_files
+        self.file_input.set_input_files(file_paths)
+        self.page.wait_for_timeout(2000)
+
+        # 3. Atur kategori foto kartu ke-2 s/d ke-5 (kartu ke-1 sudah Fasad Depan secara default)
+        selects = self.page.locator(".ant-select").all()
+        categories = data.get("categories", [])
+        for i in range(1, len(categories)):
+            selects[i].click()
+            dropdown = self.page.locator(
+                ".ant-select-dropdown:not(.ant-select-dropdown-hidden)"
+            )
+            dropdown.get_by_text(categories[i], exact=True).click()
+            self.page.wait_for_timeout(300)
+
+        # Jeda 5 detik untuk inspeksi visual di layar
+        self.page.wait_for_timeout(5000)
+
+        # 4. Klik tombol Selanjutnya untuk lanjut ke Langkah 4
+        self.selanjutnya_btn.click()
 
     def fill_step_4_legalitas(self):
         """Memproses Langkah 4: Legalitas (opsional)."""

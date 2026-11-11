@@ -18,5 +18,21 @@
     "promo_coret": true,
     "normal_price": "550000000",
     "persen_dp": "5"
+  },
+  "step_3_galeri": {
+    "images": [
+      "data/images/aset rumah baru/01_tampak_depan.png",
+      "data/images/aset rumah baru/02_living_room.png",
+      "data/images/aset rumah baru/03_dapur.png",
+      "data/images/aset rumah baru/04_kamar_tidur.png",
+      "data/images/aset rumah baru/05_denah_maple_garden.png"
+    ],
+    "categories": [
+      "Fasad Depan / Eksterior Utama",
+      "Interior / Ruang Tamu",
+      "Interior / Dapur",
+      "Interior / Kamar Tidur",
+      "Denah / Site Plan"
+    ]
   }
 }
