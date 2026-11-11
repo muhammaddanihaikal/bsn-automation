@@ -142,22 +142,22 @@ class CreateAssetBaruPage(BasePage):
         # Card 2 (Index 1): Interior / Ruang Tamu
         selects[1].click()
         dropdown.get_by_text("Interior / Ruang Tamu", exact=True).click()
-        self.page.wait_for_timeout(300)
+        dropdown.wait_for(state="hidden")
 
         # Card 3 (Index 2): Interior / Dapur
         selects[2].click()
         dropdown.get_by_text("Interior / Dapur", exact=True).click()
-        self.page.wait_for_timeout(300)
+        dropdown.wait_for(state="hidden")
 
         # Card 4 (Index 3): Interior / Kamar Tidur
         selects[3].click()
         dropdown.get_by_text("Interior / Kamar Tidur", exact=True).click()
-        self.page.wait_for_timeout(300)
+        dropdown.wait_for(state="hidden")
 
         # Card 5 (Index 4): Denah / Site Plan
         selects[4].click()
         dropdown.get_by_text("Denah / Site Plan", exact=True).click()
-        self.page.wait_for_timeout(300)
+        dropdown.wait_for(state="hidden")
 
         # Jeda 5 detik untuk inspeksi visual di layar
         self.page.wait_for_timeout(5000)
