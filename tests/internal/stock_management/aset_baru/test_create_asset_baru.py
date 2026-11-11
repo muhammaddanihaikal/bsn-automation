@@ -40,6 +40,10 @@ class TestAssetBaru:
 
         # --- LANGKAH 4: DOKUMEN & LEGALITAS ---
         create_asset_baru_page.fill_step_4_legalitas(asset_data["step_4_legalitas"])
-
-        # 3. Assert (Berhasil berpindah ke Langkah 5 Lokasi)
         expect(create_asset_baru_page.lokasi_button).to_be_visible()
+
+        # --- LANGKAH 5: LOKASI & GEOSPASIAL ---
+        create_asset_baru_page.fill_step_5_lokasi(asset_data["step_5_lokasi"])
+
+        # 3. Assert (Berhasil berpindah ke Langkah 6 Fasilitas)
+        expect(create_asset_baru_page.fasilitas_button).to_be_visible()

@@ -49,11 +49,29 @@
   },
   "step_5_lokasi": {
     "alamat_lengkap": "Jl. Boulevard Maple Garden No. 12, RT 03 / RW 05",
-    "provinsi": "Jawa Barat",
-    "kota": "Kabupaten Bogor",
-    "kecamatan": "Cibinong",
-    "kelurahan": "Pakansari",
+    "provinsi": "JAWA BARAT",
+    "kota": "KABUPATEN BOGOR",
+    "kecamatan": "CIBINONG",
+    "kelurahan": "PAKANSARI",
     "kode_pos": "16915",
-    "koordinat": "-6.482700, 106.848800"
+    "koordinat": "-6.482700, 106.848800",
+    "destinasi": [
+      {
+        "name": "Stasiun KRL Parung Panjang",
+        "access_point": "Rute Commuter Line Tanah Abang",
+        "category": "Stasiun Kereta Api",
+        "coordinate": "-6.347891, 106.568402",
+        "distance_km": "3.2",
+        "duration_minutes": "12"
+      },
+      {
+        "name": "Gerbang Tol Parung Panjang",
+        "access_point": "Jalan Tol Serpong - Balaraja",
+        "category": "Gerbang Tol",
+        "coordinate": "-6.350123, 106.571234",
+        "distance_km": "5.0",
+        "duration_minutes": "15"
+      }
+    ]
   }
 }

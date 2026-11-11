@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
 
 from pages.base_page import BasePage
 
@@ -50,9 +50,23 @@ class CreateAssetBaruPage(BasePage):
 
         # === 5. LOCATOR LANGKAH 5 (LOKASI & GEOSPASIAL) ===
         self.lokasi_button = self.page.get_by_role("button", name="5 Lokasi")
-        # TODO: Dani isi locator textarea Alamat Lengkap
-        # TODO: Dani isi locator dropdown Provinsi, Kota, Kecamatan, Kelurahan
-        # TODO: Dani isi locator textbox Kode Pos dan Koordinat GPS Lat/Long
+        self.alamat_input = self.page.locator("#address")
+        self.provinsi_select = self.page.locator("#province")
+        self.kota_select = self.page.locator("#city")
+        self.kecamatan_select = self.page.locator("#district")
+        self.kelurahan_select = self.page.locator("#sub_district")
+        self.kode_pos_input = self.page.locator("#postal_code")
+        self.koordinat_input = self.page.locator("#coordinate")
+
+        # === 5b. LOCATOR MODAL DESTINASI STRATEGIS (LANGKAH 5) ===
+        self.tambah_destinasi_btn = self.page.get_by_test_id("aset-baru-lokasi-destinasi-add-button")
+        self.destinasi_modal_name_input = self.page.get_by_test_id("aset-baru-destinasi-modal-name-input")
+        self.destinasi_modal_access_point_input = self.page.get_by_test_id("aset-baru-destinasi-modal-access-point-input")
+        self.destinasi_modal_category_select = self.page.get_by_test_id("aset-baru-destinasi-modal-category-select")
+        self.destinasi_modal_coordinate_input = self.page.get_by_test_id("aset-baru-destinasi-modal-coordinate-input")
+        self.destinasi_modal_distance_input = self.page.get_by_test_id("aset-baru-destinasi-modal-distance-input")
+        self.destinasi_modal_duration_input = self.page.get_by_test_id("aset-baru-destinasi-modal-duration-input")
+        self.destinasi_modal_submit_btn = self.page.get_by_test_id("aset-baru-destinasi-modal-submit-button")
 
         # === 6. LOCATOR LANGKAH 6 (FASILITAS & SPESIFIKASI) ===
         self.fasilitas_button = self.page.get_by_role("button", name="6 Fasilitas")
@@ -188,13 +202,79 @@ class CreateAssetBaruPage(BasePage):
         # Klik tombol Selanjutnya untuk lanjut ke Langkah 5
         self.selanjutnya_btn.click()
 
+    def add_destinasi(self, data: dict):
+        """Menambahkan satu destinasi strategis melalui modal pop-up."""
+        self.tambah_destinasi_btn.scroll_into_view_if_needed()
+        self.tambah_destinasi_btn.click()
+
+        # 1. Isi nama destinasi dan rute akses
+        self.destinasi_modal_name_input.fill(data["name"])
+        self.destinasi_modal_access_point_input.fill(data["access_point"])
+
+        # 2. Pilih kategori destinasi
+        self.destinasi_modal_category_select.click()
+        dropdown = self.page.locator(
+            ".ant-select-dropdown:not(.ant-select-dropdown-hidden)"
+        )
+        dropdown.get_by_text(data["category"], exact=True).click()
+        dropdown.wait_for(state="hidden")
+
+        # 3. Isi koordinat, jarak (km), dan durasi (menit)
+        self.destinasi_modal_coordinate_input.fill(data["coordinate"])
+        self.destinasi_modal_distance_input.fill(data["distance_km"])
+        self.destinasi_modal_duration_input.fill(data["duration_minutes"])
+
+        # 4. Klik Tambah untuk menyimpan ke tabel
+        self.destinasi_modal_submit_btn.click()
+        self.page.wait_for_timeout(500)
+
     def fill_step_5_lokasi(self, data: dict):
-        """Mengisi data alamat dan wilayah geospasial pada Langkah 5."""
+        """Mengisi data alamat, wilayah bertingkat, dan destinasi pada Langkah 5."""
         # 1. Isi Alamat Lengkap
-        # 2. Pilih Provinsi, Kota, Kecamatan, dan Kelurahan secara bertingkat
+        self.alamat_input.fill(data["alamat_lengkap"])
+
+        # 2. Dropdown Bertingkat Wilayah dengan Smart Wait
+        dropdown = self.page.locator(
+            ".ant-select-dropdown:not(.ant-select-dropdown-hidden)"
+        )
+
+        # Pilih Provinsi
+        self.provinsi_select.click()
+        dropdown.get_by_text(data["provinsi"], exact=True).click()
+        dropdown.wait_for(state="hidden")
+
+        # Pilih Kota / Kabupaten (menunggu enabled)
+        expect(self.kota_select).to_be_enabled()
+        self.kota_select.click()
+        dropdown.get_by_text(data["kota"], exact=True).click()
+        dropdown.wait_for(state="hidden")
+
+        # Pilih Kecamatan (menunggu enabled)
+        expect(self.kecamatan_select).to_be_enabled()
+        self.kecamatan_select.click()
+        dropdown.get_by_text(data["kecamatan"], exact=True).click()
+        dropdown.wait_for(state="hidden")
+
+        # Pilih Kelurahan (menunggu enabled)
+        expect(self.kelurahan_select).to_be_enabled()
+        self.kelurahan_select.click()
+        dropdown.get_by_text(data["kelurahan"], exact=True).click()
+        dropdown.wait_for(state="hidden")
+
         # 3. Isi Kode Pos dan Koordinat Peta
-        # 4. Klik tombol Selanjutnya untuk lanjut ke Langkah 6
-        pass
+        self.kode_pos_input.fill(data["kode_pos"])
+        self.koordinat_input.fill(data["koordinat"])
+
+        # 4. Tambah Destinasi Strategis (jika ada)
+        destinasi_list = data.get("destinasi", [])
+        for dest in destinasi_list:
+            self.add_destinasi(dest)
+
+        # Jeda 3 detik untuk inspeksi visual tabel di layar
+        self.page.wait_for_timeout(3000)
+
+        # 5. Klik tombol Selanjutnya untuk lanjut ke Langkah 6 (Fasilitas)
+        self.selanjutnya_btn.click()
 
     def fill_step_6_fasilitas(self, data: dict):
         """Mengisi fasilitas properti dan submit akhir pada Langkah 6."""
