@@ -165,10 +165,24 @@ class CreateAssetBaruPage(BasePage):
         # 4. Klik tombol Selanjutnya untuk lanjut ke Langkah 4
         self.selanjutnya_btn.click()
 
-    def fill_step_4_legalitas(self):
-        """Memproses Langkah 4: Legalitas (opsional)."""
-        # TODO: Dani cukup klik tombol Selanjutnya untuk melewati langkah ini
-        pass
+    def upload_dokumen_legalitas(self, nama_dokumen: str, file_path: str):
+        """Mengunggah berkas PDF ke kotak dokumen tertentu menggunakan Scoped Locator."""
+        card = self.page.locator(".rounded-lg.border").filter(has_text=nama_dokumen).first
+        card.locator("input[type='checkbox']").check()
+        card.locator("input[type='file']").set_input_files(str(Path(file_path).resolve()))
+
+    def fill_step_4_legalitas(self, data: dict):
+        """Memproses Langkah 4: Legalitas dengan mengunggah dokumen yang dipilih."""
+        dokumen_list = data.get("dokumen", [])
+        for doc in dokumen_list:
+            self.upload_dokumen_legalitas(doc["nama"], doc["file"])
+            self.page.wait_for_timeout(500)
+
+        # Jeda 3 detik untuk inspeksi visual dokumen di layar
+        self.page.wait_for_timeout(3000)
+
+        # Klik tombol Selanjutnya untuk lanjut ke Langkah 5
+        self.selanjutnya_btn.click()
 
     def fill_step_5_lokasi(self, data: dict):
         """Mengisi data alamat dan wilayah geospasial pada Langkah 5."""

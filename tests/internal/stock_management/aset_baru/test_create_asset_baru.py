@@ -25,7 +25,7 @@ class TestAssetBaru:
         aset_baru_list_page.open()
         aset_baru_list_page.click_input_aset_baru()
 
-        # 2. Act & Checkpoints (Langkah 1 s/d 3)
+        # 2. Act & Checkpoints (Langkah 1 s/d 4)
         # --- LANGKAH 1: INFORMASI DASAR ---
         create_asset_baru_page.fill_step_1_informasi(asset_data["step_1_informasi"])
         expect(create_asset_baru_page.price).to_be_visible()
@@ -36,6 +36,10 @@ class TestAssetBaru:
 
         # --- LANGKAH 3: GALERI FOTO & DENAH ---
         create_asset_baru_page.upload_step_3_galeri(asset_data["step_3_galeri"])
-
-        # 3. Assert (Berhasil berpindah ke Langkah 4 Legalitas)
         expect(create_asset_baru_page.legalitas_button).to_be_visible()
+
+        # --- LANGKAH 4: DOKUMEN & LEGALITAS ---
+        create_asset_baru_page.fill_step_4_legalitas(asset_data["step_4_legalitas"])
+
+        # 3. Assert (Berhasil berpindah ke Langkah 5 Lokasi)
+        expect(create_asset_baru_page.lokasi_button).to_be_visible()
