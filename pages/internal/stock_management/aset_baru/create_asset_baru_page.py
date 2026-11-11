@@ -166,17 +166,21 @@ class CreateAssetBaruPage(BasePage):
         self.selanjutnya_btn.click()
 
     def upload_dokumen_legalitas(self, nama_dokumen: str, file_path: str):
-        """Mengunggah berkas PDF ke kotak dokumen tertentu menggunakan Scoped Locator."""
+        """Mengunggah berkas PDF ke kotak dokumen tertentu menggunakan Scoped Locator dan Smart Timeout."""
         card = self.page.locator(".rounded-lg.border").filter(has_text=nama_dokumen).first
+        # 1. Centang checkbox dokumen
         card.locator("input[type='checkbox']").check()
-        card.locator("input[type='file']").set_input_files(str(Path(file_path).resolve()))
+        # 2. Upload file PDF ke input file dalam card tersebut
+        resolved_path = Path(file_path).resolve()
+        card.locator("input[type='file']").set_input_files(str(resolved_path))
+        # 3. Smart Timeout: Tunggu hingga nama file PDF muncul di dalam card
+        card.get_by_text(resolved_path.name).wait_for(state="visible")
 
     def fill_step_4_legalitas(self, data: dict):
         """Memproses Langkah 4: Legalitas dengan mengunggah dokumen yang dipilih."""
         dokumen_list = data.get("dokumen", [])
         for doc in dokumen_list:
             self.upload_dokumen_legalitas(doc["nama"], doc["file"])
-            self.page.wait_for_timeout(500)
 
         # Jeda 3 detik untuk inspeksi visual dokumen di layar
         self.page.wait_for_timeout(3000)
