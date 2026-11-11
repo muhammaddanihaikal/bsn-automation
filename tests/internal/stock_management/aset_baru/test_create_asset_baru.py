@@ -2,7 +2,6 @@ import allure
 import pytest
 from playwright.sync_api import Page, expect
 
-from pages.internal.sidebar import Sidebar
 from pages.internal.stock_management.aset_baru.asset_baru_list_page import (
     AssetBaruListPage,
 )
@@ -21,10 +20,9 @@ class TestAssetBaru:
         page = logged_in_internal
         aset_baru_list_page = AssetBaruListPage(page)
         create_asset_baru_page = CreateAssetBaruPage(page)
-        sidebar = Sidebar(page)
 
-        # 1. Arrange (Navigasi via Sidebar)
-        sidebar.go_to_aset_baru()
+        # 1. Arrange (Masuk via Direct URL pintu gerbang modul)
+        aset_baru_list_page.open()
         aset_baru_list_page.click_input_aset_baru()
 
         # 2. Act (Eksekusi Langkah 1 menggunakan data JSON)

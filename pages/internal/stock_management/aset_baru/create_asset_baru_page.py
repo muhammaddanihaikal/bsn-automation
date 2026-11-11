@@ -123,7 +123,7 @@ class CreateAssetBaruPage(BasePage):
         # 4. Klik Selanjutnya
         self.selanjutnya_btn.click()
 
-    def upload_step_3_galeri(self, foto_paths: list[str], denah_path: str):
+    def upload_step_3_galeri(self, data: dict):
         """Mengunggah 4 foto aset dan 1 denah pada Langkah 3."""
         # TODO: Dani ketik langkah upload 5 file gambar dan klik Selanjutnya
         pass
@@ -138,7 +138,7 @@ class CreateAssetBaruPage(BasePage):
         # TODO: Dani ketik langkah pengisian alamat & wilayah lalu klik Selanjutnya
         pass
 
-    def fill_step_6_fasilitas(self):
+    def fill_step_6_fasilitas(self, data: dict):
         """Mengisi fasilitas properti dan submit akhir pada Langkah 6."""
         # TODO: Dani aktifkan fasilitas yang diinginkan lalu klik 'Simpan dan Ajukan Perubahan'
         pass
