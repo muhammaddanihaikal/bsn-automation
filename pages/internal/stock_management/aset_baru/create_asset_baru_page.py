@@ -190,7 +190,10 @@ class CreateAssetBaruPage(BasePage):
 
     def fill_step_5_lokasi(self, data: dict):
         """Mengisi data alamat dan wilayah geospasial pada Langkah 5."""
-        # TODO: Dani ketik langkah pengisian alamat & wilayah lalu klik Selanjutnya
+        # 1. Isi Alamat Lengkap
+        # 2. Pilih Provinsi, Kota, Kecamatan, dan Kelurahan secara bertingkat
+        # 3. Isi Kode Pos dan Koordinat Peta
+        # 4. Klik tombol Selanjutnya untuk lanjut ke Langkah 6
         pass
 
     def fill_step_6_fasilitas(self, data: dict):
