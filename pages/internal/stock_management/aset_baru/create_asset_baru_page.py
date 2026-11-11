@@ -133,16 +133,31 @@ class CreateAssetBaruPage(BasePage):
         self.file_input.set_input_files(file_paths)
         self.page.wait_for_timeout(2000)
 
-        # 3. Atur kategori foto kartu ke-2 s/d ke-5 (kartu ke-1 sudah Fasad Depan secara default)
+        # 3. Atur kategori foto kartu ke-2 s/d ke-5 secara manual satu per satu
         selects = self.page.locator(".ant-select").all()
-        categories = data.get("categories", [])
-        for i in range(1, len(categories)):
-            selects[i].click()
-            dropdown = self.page.locator(
-                ".ant-select-dropdown:not(.ant-select-dropdown-hidden)"
-            )
-            dropdown.get_by_text(categories[i], exact=True).click()
-            self.page.wait_for_timeout(300)
+        dropdown = self.page.locator(
+            ".ant-select-dropdown:not(.ant-select-dropdown-hidden)"
+        )
+
+        # Card 2 (Index 1): Interior / Ruang Tamu
+        selects[1].click()
+        dropdown.get_by_text("Interior / Ruang Tamu", exact=True).click()
+        self.page.wait_for_timeout(300)
+
+        # Card 3 (Index 2): Interior / Dapur
+        selects[2].click()
+        dropdown.get_by_text("Interior / Dapur", exact=True).click()
+        self.page.wait_for_timeout(300)
+
+        # Card 4 (Index 3): Interior / Kamar Tidur
+        selects[3].click()
+        dropdown.get_by_text("Interior / Kamar Tidur", exact=True).click()
+        self.page.wait_for_timeout(300)
+
+        # Card 5 (Index 4): Denah / Site Plan
+        selects[4].click()
+        dropdown.get_by_text("Denah / Site Plan", exact=True).click()
+        self.page.wait_for_timeout(300)
 
         # Jeda 5 detik untuk inspeksi visual di layar
         self.page.wait_for_timeout(5000)
