@@ -34,5 +34,17 @@
       "Interior / Kamar Tidur",
       "Denah / Site Plan"
     ]
+  },
+  "step_4_legalitas": {
+    "dokumen": [
+      {
+        "nama": "Akta Jual Beli",
+        "file": "data/documents/akta_jual_beli.pdf"
+      },
+      {
+        "nama": "Akta Kuasa Menjual",
+        "file": "data/documents/akta_kuasa_menjual.pdf"
+      }
+    ]
   }
 }
