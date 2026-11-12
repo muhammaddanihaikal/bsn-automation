@@ -32,18 +32,18 @@ class TestAssetBaru:
 
         # --- LANGKAH 2: HARGA ---
         create_asset_baru_page.fill_step_2_harga(asset_data["step_2_harga"])
-        expect(create_asset_baru_page.galeri_button).to_be_visible()
+        expect(create_asset_baru_page.galeri_btn).to_be_visible()
 
         # --- LANGKAH 3: GALERI FOTO & DENAH ---
         create_asset_baru_page.upload_step_3_galeri(asset_data["step_3_galeri"])
-        expect(create_asset_baru_page.legalitas_button).to_be_visible()
+        expect(create_asset_baru_page.legalitas_btn).to_be_visible()
 
         # --- LANGKAH 4: DOKUMEN & LEGALITAS ---
         create_asset_baru_page.fill_step_4_legalitas(asset_data["step_4_legalitas"])
-        expect(create_asset_baru_page.lokasi_button).to_be_visible()
+        expect(create_asset_baru_page.lokasi_btn).to_be_visible()
 
         # --- LANGKAH 5: LOKASI & GEOSPASIAL ---
         create_asset_baru_page.fill_step_5_lokasi(asset_data["step_5_lokasi"])
 
         # 3. Assert (Berhasil berpindah ke Langkah 6 Fasilitas)
-        expect(create_asset_baru_page.fasilitas_button).to_be_visible()
+        expect(create_asset_baru_page.fasilitas_btn).to_be_visible()

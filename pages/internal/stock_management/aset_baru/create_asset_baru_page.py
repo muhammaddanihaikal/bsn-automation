@@ -13,7 +13,7 @@ class CreateAssetBaruPage(BasePage):
         self.PATH = "/internal/stock-management/aset-baru/create"
 
         # === 1. LOCATOR LANGKAH 1 (INFORMASI ASET) ===
-        self.informasi_button = self.page.get_by_role("button", name="1 Informasi")
+        self.informasi_btn = self.page.get_by_role("button", name="1 Informasi")
         self.developer_select = self.page.locator("#developer_id")
         self.asset_type_select = self.page.locator("#asset_type")
         self.project_select = self.page.locator("#project_id")
@@ -33,23 +33,23 @@ class CreateAssetBaruPage(BasePage):
         )
 
         # === 2. LOCATOR LANGKAH 2 (HARGA) ===
-        self.harga_button = self.page.get_by_role("button", name="2 Harga")
+        self.harga_btn = self.page.get_by_role("button", name="2 Harga")
         self.price = self.page.locator("#price")
         self.promo_switch = self.page.locator("#promo_enabled")
         self.normal_price = self.page.locator("#normal_price")
         self.dp_percentage = self.page.locator("#dp_percent")
 
         # === 3. LOCATOR LANGKAH 3 (GALERI FOTO & DENAH) ===
-        self.galeri_button = self.page.get_by_role("button", name="3 Galeri")
+        self.galeri_btn = self.page.get_by_role("button", name="3 Galeri")
         self.file_input = self.page.locator("input[type='file']")
 
         # === 4. LOCATOR LANGKAH 4 (LEGALITAS) ===
-        self.legalitas_button = self.page.get_by_role("button", name="4 Legalitas")
+        self.legalitas_btn = self.page.get_by_role("button", name="4 Legalitas")
 
         # TODO: Dani isi locator checklist dokumen (opsional)
 
         # === 5. LOCATOR LANGKAH 5 (LOKASI & GEOSPASIAL) ===
-        self.lokasi_button = self.page.get_by_role("button", name="5 Lokasi")
+        self.lokasi_btn = self.page.get_by_role("button", name="5 Lokasi")
         self.alamat_input = self.page.locator("#address")
         self.provinsi_select = self.page.locator("#province")
         self.kota_select = self.page.locator("#city")
@@ -59,17 +59,33 @@ class CreateAssetBaruPage(BasePage):
         self.koordinat_input = self.page.locator("#coordinate")
 
         # === 5b. LOCATOR MODAL DESTINASI STRATEGIS (LANGKAH 5) ===
-        self.tambah_destinasi_btn = self.page.get_by_test_id("aset-baru-lokasi-destinasi-add-button")
-        self.destinasi_modal_name_input = self.page.get_by_test_id("aset-baru-destinasi-modal-name-input")
-        self.destinasi_modal_access_point_input = self.page.get_by_test_id("aset-baru-destinasi-modal-access-point-input")
-        self.destinasi_modal_category_select = self.page.get_by_test_id("aset-baru-destinasi-modal-category-select")
-        self.destinasi_modal_coordinate_input = self.page.get_by_test_id("aset-baru-destinasi-modal-coordinate-input")
-        self.destinasi_modal_distance_input = self.page.get_by_test_id("aset-baru-destinasi-modal-distance-input")
-        self.destinasi_modal_duration_input = self.page.get_by_test_id("aset-baru-destinasi-modal-duration-input")
-        self.destinasi_modal_submit_btn = self.page.get_by_test_id("aset-baru-destinasi-modal-submit-button")
+        self.tambah_destinasi_btn = self.page.get_by_test_id(
+            "aset-baru-lokasi-destinasi-add-button"
+        )
+        self.destinasi_modal_name_input = self.page.get_by_test_id(
+            "aset-baru-destinasi-modal-name-input"
+        )
+        self.destinasi_modal_access_point_input = self.page.get_by_test_id(
+            "aset-baru-destinasi-modal-access-point-input"
+        )
+        self.destinasi_modal_category_select = self.page.get_by_test_id(
+            "aset-baru-destinasi-modal-category-select"
+        )
+        self.destinasi_modal_coordinate_input = self.page.get_by_test_id(
+            "aset-baru-destinasi-modal-coordinate-input"
+        )
+        self.destinasi_modal_distance_input = self.page.get_by_test_id(
+            "aset-baru-destinasi-modal-distance-input"
+        )
+        self.destinasi_modal_duration_input = self.page.get_by_test_id(
+            "aset-baru-destinasi-modal-duration-input"
+        )
+        self.destinasi_modal_submit_btn = self.page.get_by_test_id(
+            "aset-baru-destinasi-modal-submit-button"
+        )
 
         # === 6. LOCATOR LANGKAH 6 (FASILITAS & SPESIFIKASI) ===
-        self.fasilitas_button = self.page.get_by_role("button", name="6 Fasilitas")
+        self.fasilitas_btn = self.page.get_by_role("button", name="6 Fasilitas")
 
         # TODO: Dani isi locator textbox Jalan Depan & Daya Listrik
         # TODO: Dani isi locator toggle switch fasilitas unit & kawasan
@@ -181,7 +197,9 @@ class CreateAssetBaruPage(BasePage):
 
     def upload_dokumen_legalitas(self, nama_dokumen: str, file_path: str):
         """Mengunggah berkas PDF ke kotak dokumen tertentu menggunakan Scoped Locator dan Smart Timeout."""
-        card = self.page.locator(".rounded-lg.border").filter(has_text=nama_dokumen).first
+        card = (
+            self.page.locator(".rounded-lg.border").filter(has_text=nama_dokumen).first
+        )
         # 1. Centang checkbox dokumen
         card.locator("input[type='checkbox']").check()
         # 2. Upload file PDF ke input file dalam card tersebut
