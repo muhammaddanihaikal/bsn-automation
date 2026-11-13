@@ -1,4 +1,5 @@
 import re
+
 import allure
 import pytest
 from playwright.sync_api import Page, expect
@@ -62,5 +63,7 @@ class TestAssetBaru:
         expect(page.get_by_role("heading", level=1)).to_contain_text(expected_title)
 
         # Anchor 3: Status badge awal adalah VERIFIKASI & Unpublished
-        expect(page.locator("h1 + span")).to_contain_text("Verifikasi", ignore_case=True)
+        expect(page.locator("h1 + span")).to_contain_text(
+            "Verifikasi", ignore_case=True
+        )
         expect(page.get_by_text("Unpublished")).to_be_visible()

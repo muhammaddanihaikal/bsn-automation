@@ -43,8 +43,7 @@ class CreateAssetBaruPage(BasePage):
 
         # === 4. LOCATOR LANGKAH 4 (LEGALITAS) ===
         self.legalitas_btn = self.page.get_by_role("button", name="4 Legalitas")
-
-        # TODO: Dani isi locator checklist dokumen (opsional)
+        # Checklist dokumen ditangani dinamis via Scoped Locator di upload_dokumen_legalitas()
 
         # === 5. LOCATOR LANGKAH 5 (LOKASI & GEOSPASIAL) ===
         self.lokasi_btn = self.page.get_by_role("button", name="5 Lokasi")
@@ -57,6 +56,7 @@ class CreateAssetBaruPage(BasePage):
         self.koordinat_input = self.page.locator("#coordinate")
 
         # === 5b. LOCATOR MODAL DESTINASI STRATEGIS (LANGKAH 5) ===
+        # Pakai data-testid karena #coordinate di modal kembar dengan form utama
         self.tambah_destinasi_btn = self.page.get_by_test_id(
             "aset-baru-lokasi-destinasi-add-button"
         )
@@ -88,6 +88,7 @@ class CreateAssetBaruPage(BasePage):
         self.arah_mata_angin_select = self.page.locator("#cardinal_point")
         self.daya_listrik_select = self.page.locator("#power_va")
         self.sumber_air_input = self.page.locator("#water_source")
+        # .first = Fasilitas Unit, .nth(1) = Fasilitas Umum & Kawasan
         self.pilih_semua_unit_switch = self.page.get_by_role(
             "switch", name="Pilih semua"
         ).first
@@ -105,27 +106,32 @@ class CreateAssetBaruPage(BasePage):
 
     def fill_step_1_informasi(self, data: dict):
         """Mengisi data informasi dasar aset pada Langkah 1."""
+        dropdown = self.page.locator(
+            ".ant-select-dropdown:not(.ant-select-dropdown-hidden)"
+        )
+
         # 1. Pilih Developer
         self.developer_select.click()
-        self.page.get_by_text(data["developer"]).click()
+        dropdown.get_by_text(data["developer"]).click()
+        dropdown.wait_for(state="hidden")
 
         # 2. Pilih Tipe Aset
         self.asset_type_select.click()
-        # Scroll dropdown ke bawah biar opsi 'Rumah' muncul di HTML
-        dropdown = self.page.locator(".ant-select-dropdown").filter(
-            has_text="Apartemen"
-        )
-        dropdown.locator(".rc-virtual-list-holder").evaluate("el => el.scrollTop = 500")
         dropdown.get_by_text(data["asset_type"], exact=True).click()
+        dropdown.wait_for(state="hidden")
 
         # 3. Pilih Proyek & Klaster
         self.project_select.click()
-        self.page.get_by_text(data["project"]).click()
+        dropdown.get_by_text(data["project"]).click()
+        dropdown.wait_for(state="hidden")
+
         self.cluster_select.click()
-        self.page.get_by_text(data["cluster"]).click()
+        dropdown.get_by_text(data["cluster"]).click()
+        dropdown.wait_for(state="hidden")
 
         # 4. Pilih Tipe Unit
         self.unit_type_select.click()
+        # Pakai .nth(1) karena teks tipe unit juga muncul di elemen lain pada DOM
         self.page.get_by_text(data["unit_type"]).nth(1).click()
 
         # 5. Isi Stok Unit & Subsidi
@@ -165,11 +171,14 @@ class CreateAssetBaruPage(BasePage):
         # 1. Konversi path gambar relatif ke absolute path lokal
         file_paths = [str(Path(p).resolve()) for p in data["images"]]
 
-        # 2. Upload sekaligus seluruh file via set_input_files
+        # 2. Upload sekaligus seluruh file via set_input_files dan tunggu render kartu selesai
         self.foto_file_input.set_input_files(file_paths)
-        self.page.wait_for_timeout(2000)
+        self.page.locator(".ant-select").nth(len(file_paths) - 1).wait_for(
+            state="visible"
+        )
 
         # 3. Atur kategori foto kartu ke-2 s/d ke-5 secara manual satu per satu
+        # Mulai index [1] karena index [0] default sudah terisi 'Fasad Depan / Eksterior Utama'
         selects = self.page.locator(".ant-select").all()
         dropdown = self.page.locator(
             ".ant-select-dropdown:not(.ant-select-dropdown-hidden)"
@@ -195,9 +204,6 @@ class CreateAssetBaruPage(BasePage):
         dropdown.get_by_text("Denah / Site Plan", exact=True).click()
         dropdown.wait_for(state="hidden")
 
-        # Jeda 5 detik untuk inspeksi visual di layar
-        self.page.wait_for_timeout(5000)
-
         # 4. Klik tombol Selanjutnya untuk lanjut ke Langkah 4
         self.selanjutnya_btn.click()
 
@@ -219,9 +225,6 @@ class CreateAssetBaruPage(BasePage):
         dokumen_list = data.get("dokumen", [])
         for doc in dokumen_list:
             self.upload_dokumen_legalitas(doc["nama"], doc["file"])
-
-        # Jeda 3 detik untuk inspeksi visual dokumen di layar
-        self.page.wait_for_timeout(3000)
 
         # Klik tombol Selanjutnya untuk lanjut ke Langkah 5
         self.selanjutnya_btn.click()
@@ -248,9 +251,9 @@ class CreateAssetBaruPage(BasePage):
         self.destinasi_modal_distance_input.fill(data["distance_km"])
         self.destinasi_modal_duration_input.fill(data["duration_minutes"])
 
-        # 4. Klik Tambah untuk menyimpan ke tabel
+        # 4. Klik Tambah untuk menyimpan ke tabel & tunggu modal tertutup
         self.destinasi_modal_submit_btn.click()
-        self.page.wait_for_timeout(500)
+        self.destinasi_modal_name_input.wait_for(state="hidden")
 
     def fill_step_5_lokasi(self, data: dict):
         """Mengisi data alamat, wilayah bertingkat, dan destinasi pada Langkah 5."""
@@ -258,6 +261,7 @@ class CreateAssetBaruPage(BasePage):
         self.alamat_input.fill(data["alamat_lengkap"])
 
         # 2. Dropdown Bertingkat Wilayah dengan Smart Wait
+        # Child dropdown disabled sebelum parent dipilih; opsi wilayah JSON wajib HURUF KAPITAL
         dropdown = self.page.locator(
             ".ant-select-dropdown:not(.ant-select-dropdown-hidden)"
         )
@@ -294,18 +298,14 @@ class CreateAssetBaruPage(BasePage):
         for dest in destinasi_list:
             self.add_destinasi(dest)
 
-        # Jeda 3 detik untuk inspeksi visual tabel di layar
-        self.page.wait_for_timeout(3000)
-
         # 5. Klik tombol Selanjutnya untuk lanjut ke Langkah 6 (Fasilitas)
         self.selanjutnya_btn.click()
 
     def fill_step_6_fasilitas(self, data: dict):
         """Mengisi spesifikasi tambahan, mengaktifkan seluruh fasilitas, dan submit form aset baru."""
-        # 1. Isi lebar jalan depan
+        # 1. Spesifikasi akses jalan, arah hadap, daya listrik, dan air
         self.lebar_jalan_input.fill(str(data["lebar_jalan"]))
 
-        # 2. Pilih arah mata angin
         self.arah_mata_angin_select.click()
         cardinal_dropdown = self.page.locator(
             ".ant-select-dropdown:not(.ant-select-dropdown-hidden)"
@@ -313,7 +313,6 @@ class CreateAssetBaruPage(BasePage):
         cardinal_dropdown.get_by_text(data["arah_mata_angin"], exact=True).click()
         cardinal_dropdown.wait_for(state="hidden")
 
-        # 3. Pilih daya listrik
         self.daya_listrik_select.click()
         power_dropdown = self.page.locator(
             ".ant-select-dropdown:not(.ant-select-dropdown-hidden)"
@@ -321,15 +320,12 @@ class CreateAssetBaruPage(BasePage):
         power_dropdown.get_by_text(data["daya_listrik"], exact=True).click()
         power_dropdown.wait_for(state="hidden")
 
-        # 4. Isi sumber air bersih
         self.sumber_air_input.fill(data["sumber_air"])
 
-        # 5. Aktifkan saklar Pilih Semua untuk unit dan kawasan
+        # 2. Aktifkan saklar Pilih Semua lalu submit
         if data.get("pilih_semua_unit", True):
             self.pilih_semua_unit_switch.click()
         if data.get("pilih_semua_kawasan", True):
             self.pilih_semua_kawasan_switch.click()
 
-        # 6. Klik tombol submit akhir form
         self.submit_btn.click()
-        self.page.wait_for_timeout(10000)
