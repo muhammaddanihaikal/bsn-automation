@@ -23,11 +23,11 @@ class TestAssetBaru:
         aset_baru_list_page = AssetBaruListPage(page)
         create_asset_baru_page = CreateAssetBaruPage(page)
 
-        # 1. Arrange (Masuk via Direct URL pintu gerbang modul)
+        # 1. Arrange (Masuk via Direct URL agar independen dari navigasi sidebar)
         aset_baru_list_page.open()
         aset_baru_list_page.click_input_aset_baru()
 
-        # 2. Act & Checkpoints (Langkah 1 s/d 4)
+        # 2. Act & Checkpoints (Langkah 1 s/d 6 — 1 anchor unik per transisi step)
         # --- LANGKAH 1: INFORMASI DASAR ---
         create_asset_baru_page.fill_step_1_informasi(asset_data["step_1_informasi"])
         expect(create_asset_baru_page.harga_input).to_be_visible()
@@ -51,18 +51,17 @@ class TestAssetBaru:
         # --- LANGKAH 6: FASILITAS & SUBMIT AKHIR ---
         create_asset_baru_page.fill_step_6_fasilitas(asset_data["step_6_fasilitas"])
 
-        # 3. Assert (Validasi Halaman Detail Aset Baru - The Golden Anchors)
-        # Anchor 1: URL berhasil beralih ke halaman detail unik
+        # 3. Assert (Validasi Halaman Detail — The Golden Anchors)
+        # Batas 60s karena sistem mengunggah 2 file PDF di background sebelum redirect
         expect(page).to_have_url(
             re.compile(r".*/stock-management/aset-baru/detail/.*"),
             timeout=60000,
         )
 
-        # Anchor 2: Judul H1 aset sesuai data yang diinput
         expected_title = f"{asset_data['step_1_informasi']['project']} - {asset_data['step_1_informasi']['unit_type']}"
         expect(page.get_by_role("heading", level=1)).to_contain_text(expected_title)
 
-        # Anchor 3: Status badge awal adalah VERIFIKASI & Unpublished
+        # Pakai h1 + span & ignore_case karena 'Verifikasi' muncul 6x di DOM (uppercase hanya CSS)
         expect(page.locator("h1 + span")).to_contain_text(
             "Verifikasi", ignore_case=True
         )
