@@ -28,20 +28,18 @@ class CreateAssetBaruPage(BasePage):
         self.bedrooms_input = self.page.locator("#bedrooms")
         self.bathrooms_input = self.page.locator("#bathrooms")
 
-        self.description_input = self.page.get_by_role(
-            "textbox", name="Ceritakan keunggulan lokasi,"
-        )
+        self.deskripsi_textarea = self.page.locator("#description")
 
         # === 2. LOCATOR LANGKAH 2 (HARGA) ===
         self.harga_btn = self.page.get_by_role("button", name="2 Harga")
-        self.price = self.page.locator("#price")
+        self.harga_input = self.page.locator("#price")
         self.promo_switch = self.page.locator("#promo_enabled")
-        self.normal_price = self.page.locator("#normal_price")
-        self.dp_percentage = self.page.locator("#dp_percent")
+        self.harga_normal_input = self.page.locator("#normal_price")
+        self.persen_dp_input = self.page.locator("#dp_percent")
 
         # === 3. LOCATOR LANGKAH 3 (GALERI FOTO & DENAH) ===
         self.galeri_btn = self.page.get_by_role("button", name="3 Galeri")
-        self.file_input = self.page.locator("input[type='file']")
+        self.foto_file_input = self.page.locator("input[type='file']")
 
         # === 4. LOCATOR LANGKAH 4 (LEGALITAS) ===
         self.legalitas_btn = self.page.get_by_role("button", name="4 Legalitas")
@@ -139,7 +137,7 @@ class CreateAssetBaruPage(BasePage):
         self.floors_input.fill(data["floors"])
         self.bedrooms_input.fill(data["bedrooms"])
         self.bathrooms_input.fill(data["bathrooms"])
-        self.description_input.fill(data["description"])
+        self.deskripsi_textarea.fill(data["description"])
 
         # 7. Klik Selanjutnya
         self.selanjutnya_btn.click()
@@ -147,17 +145,17 @@ class CreateAssetBaruPage(BasePage):
     def fill_step_2_harga(self, data: dict):
         """Mengisi data harga transaksi dan simulasi DP pada Langkah 2."""
         # 1. Isi harga aset (netto)
-        self.price.fill(data["price"])
+        self.harga_input.fill(data["price"])
 
         # 2. Atur switch promo coret & isi harga normal jika aktif
         if data.get("promo_coret", False):
             self.promo_switch.check()
-            self.normal_price.fill(data["normal_price"])
+            self.harga_normal_input.fill(data["normal_price"])
         else:
             self.promo_switch.uncheck()
 
         # 3. Isi persentase DP
-        self.dp_percentage.fill(data["persen_dp"])
+        self.persen_dp_input.fill(data["persen_dp"])
 
         # 4. Klik Selanjutnya
         self.selanjutnya_btn.click()
@@ -168,7 +166,7 @@ class CreateAssetBaruPage(BasePage):
         file_paths = [str(Path(p).resolve()) for p in data["images"]]
 
         # 2. Upload sekaligus seluruh file via set_input_files
-        self.file_input.set_input_files(file_paths)
+        self.foto_file_input.set_input_files(file_paths)
         self.page.wait_for_timeout(2000)
 
         # 3. Atur kategori foto kartu ke-2 s/d ke-5 secara manual satu per satu

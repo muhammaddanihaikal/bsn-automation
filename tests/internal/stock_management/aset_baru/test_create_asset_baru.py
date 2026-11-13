@@ -29,7 +29,7 @@ class TestAssetBaru:
         # 2. Act & Checkpoints (Langkah 1 s/d 4)
         # --- LANGKAH 1: INFORMASI DASAR ---
         create_asset_baru_page.fill_step_1_informasi(asset_data["step_1_informasi"])
-        expect(create_asset_baru_page.price).to_be_visible()
+        expect(create_asset_baru_page.harga_input).to_be_visible()
 
         # --- LANGKAH 2: HARGA ---
         create_asset_baru_page.fill_step_2_harga(asset_data["step_2_harga"])
