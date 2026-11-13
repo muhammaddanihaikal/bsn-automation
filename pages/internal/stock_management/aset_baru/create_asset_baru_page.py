@@ -86,9 +86,17 @@ class CreateAssetBaruPage(BasePage):
 
         # === 6. LOCATOR LANGKAH 6 (FASILITAS & SPESIFIKASI) ===
         self.fasilitas_btn = self.page.get_by_role("button", name="6 Fasilitas")
-
-        # TODO: Dani isi locator textbox Jalan Depan & Daya Listrik
-        # TODO: Dani isi locator toggle switch fasilitas unit & kawasan
+        self.lebar_jalan_input = self.page.locator("#road_width")
+        self.arah_mata_angin_select = self.page.locator("#cardinal_point")
+        self.daya_listrik_select = self.page.locator("#power_va")
+        self.sumber_air_input = self.page.locator("#water_source")
+        self.pilih_semua_unit_switch = self.page.get_by_role(
+            "switch", name="Pilih semua"
+        ).first
+        self.pilih_semua_kawasan_switch = self.page.get_by_role(
+            "switch", name="Pilih semua"
+        ).nth(1)
+        self.submit_btn = self.page.get_by_test_id("aset-baru-form-submit-button")
 
         # === 7. TOMBOL NAVIGASI WIZARD ===
         self.selanjutnya_btn = self.page.get_by_test_id("aset-baru-form-next-button")
@@ -295,6 +303,35 @@ class CreateAssetBaruPage(BasePage):
         self.selanjutnya_btn.click()
 
     def fill_step_6_fasilitas(self, data: dict):
-        """Mengisi fasilitas properti dan submit akhir pada Langkah 6."""
-        # TODO: Dani aktifkan fasilitas yang diinginkan lalu klik 'Simpan dan Ajukan Perubahan'
-        pass
+        """Mengisi spesifikasi tambahan, mengaktifkan seluruh fasilitas, dan submit form aset baru."""
+        # 1. Isi lebar jalan depan
+        self.lebar_jalan_input.fill(str(data["lebar_jalan"]))
+
+        # 2. Pilih arah mata angin
+        self.arah_mata_angin_select.click()
+        cardinal_dropdown = self.page.locator(
+            ".ant-select-dropdown:not(.ant-select-dropdown-hidden)"
+        )
+        cardinal_dropdown.get_by_text(data["arah_mata_angin"], exact=True).click()
+        cardinal_dropdown.wait_for(state="hidden")
+
+        # 3. Pilih daya listrik
+        self.daya_listrik_select.click()
+        power_dropdown = self.page.locator(
+            ".ant-select-dropdown:not(.ant-select-dropdown-hidden)"
+        )
+        power_dropdown.get_by_text(data["daya_listrik"], exact=True).click()
+        power_dropdown.wait_for(state="hidden")
+
+        # 4. Isi sumber air bersih
+        self.sumber_air_input.fill(data["sumber_air"])
+
+        # 5. Aktifkan saklar Pilih Semua untuk unit dan kawasan
+        if data.get("pilih_semua_unit", True):
+            self.pilih_semua_unit_switch.click()
+        if data.get("pilih_semua_kawasan", True):
+            self.pilih_semua_kawasan_switch.click()
+
+        # 6. Klik tombol submit akhir form
+        self.submit_btn.click()
+        self.page.wait_for_timeout(10000)

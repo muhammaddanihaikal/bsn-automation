@@ -1,3 +1,4 @@
+import re
 import allure
 import pytest
 from playwright.sync_api import Page, expect
@@ -44,6 +45,22 @@ class TestAssetBaru:
 
         # --- LANGKAH 5: LOKASI & GEOSPASIAL ---
         create_asset_baru_page.fill_step_5_lokasi(asset_data["step_5_lokasi"])
-
-        # 3. Assert (Berhasil berpindah ke Langkah 6 Fasilitas)
         expect(create_asset_baru_page.fasilitas_btn).to_be_visible()
+
+        # --- LANGKAH 6: FASILITAS & SUBMIT AKHIR ---
+        create_asset_baru_page.fill_step_6_fasilitas(asset_data["step_6_fasilitas"])
+
+        # 3. Assert (Validasi Halaman Detail Aset Baru - The Golden Anchors)
+        # Anchor 1: URL berhasil beralih ke halaman detail unik
+        expect(page).to_have_url(
+            re.compile(r".*/stock-management/aset-baru/detail/.*"),
+            timeout=60000,
+        )
+
+        # Anchor 2: Judul H1 aset sesuai data yang diinput
+        expected_title = f"{asset_data['step_1_informasi']['project']} - {asset_data['step_1_informasi']['unit_type']}"
+        expect(page.get_by_role("heading", level=1)).to_contain_text(expected_title)
+
+        # Anchor 3: Status badge awal adalah VERIFIKASI & Unpublished
+        expect(page.locator("h1 + span")).to_contain_text("Verifikasi", ignore_case=True)
+        expect(page.get_by_text("Unpublished")).to_be_visible()

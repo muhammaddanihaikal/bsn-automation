@@ -73,5 +73,13 @@
         "duration_minutes": "15"
       }
     ]
+  },
+  "step_6_fasilitas": {
+    "lebar_jalan": "6",
+    "arah_mata_angin": "Utara",
+    "daya_listrik": "2.200 VA",
+    "sumber_air": "PDAM Tirta Kahuripan",
+    "pilih_semua_unit": true,
+    "pilih_semua_kawasan": true
   }
 }
