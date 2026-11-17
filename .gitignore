@@ -16,3 +16,6 @@ __pycache__/
 
 # uv
 .venv/
+
+# Graphify output
+graphify-out/
